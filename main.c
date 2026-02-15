@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> //
 #include "estruturas.h"
 
 
@@ -164,4 +164,5 @@ int main() {
 
     liberarHistorico(historico);
     return 0;
+
 }
