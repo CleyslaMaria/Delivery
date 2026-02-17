@@ -42,30 +42,15 @@ typedef struct NoHistorico {
 // Protótipos de funções
 
 /* === Pedido === */
-Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade) {
-    Pedido *p = malloc(sizeof(Pedido));
-    if (p == NULL) return NULL;
-
-    p->id = id;
-    strcpy(p->cliente, cliente);
-    strcpy(p->hamburguer, hamburguer);
-    p->quantidade = quantidade;
-    p->status = EM_ESPERA;
-
-    return p;
-}
-
-void liberarPedido(Pedido *p) {
-    if (p != NULL) {
-        free(p);
-    }
-}
+Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade);
+void liberarPedido(Pedido *p);
 
 /* === Fila === */
 void inicializarFila(FilaPedidos *fila);
 int filaVazia(FilaPedidos *fila);
 void enfileirar(FilaPedidos *fila, Pedido *p);
 Pedido* desenfileirar(FilaPedidos *fila);
+Pedido* desenfileirarUltimo(FilaPedidos *fila);
 void listarFila(FilaPedidos *fila);
 
 /* === Pedido em preparo === */

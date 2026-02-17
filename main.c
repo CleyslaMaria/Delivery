@@ -79,7 +79,7 @@ int main() {
             scanf("%d", &quantidade);
             getchar(); // Limpa o buffer
             
-            Pedido *novo = criarPedido(id++, cliente, hamburguer, quantidade);
+            Pedido *novo = criarPedido(id, cliente, hamburguer, quantidade);
             id++;
             enfileirar(&fila, novo);
             /*        
@@ -92,7 +92,7 @@ int main() {
             printf("Pedido adicionado: %s - %s x%d\n", cliente, hamburguer, quantidade);
         }
         else if (opcao == 2){
-            printf("Pedidos em espera:\n)");
+            printf("Pedidos em espera:\n");
             // Lista pedidos em espera
             /* - Percorrer a fila e exibe os pedidos em espera
                - mostrar o número do pedido, nome do cliente, tipo de hambúrguer e quantidade
@@ -112,7 +112,18 @@ int main() {
                     - Definir status como "Em preparo"
                     - Armazenar em uma estrutura separada
             */
-           printf("Pedido em preparo...\n");  
+           if (pedidoEmPreparo != NULL) {
+               printf("Ja existe um pedido em preparo. Finalize antes.\n");
+           } else {
+               Pedido *p = desenfileirar(&fila);
+               if (p == NULL) {
+                   printf("Nao ha pedidos na fila.\n");
+               } else {
+                   p->status = EM_PREPARO;
+                   pedidoEmPreparo = p;
+                   printf("Pedido %d em preparo: %s\n", p->id, p->cliente);
+               }
+           }
         }
         else if (opcao == 4){
             //Finaliza a entrega do pedido
@@ -124,8 +135,14 @@ int main() {
                     - Liberar estrutura de pedido em preparo
                 - Se não existir, informar que não há pedido em preparo
             */
-           lliberarPedido(pedidoEmPreparo);
-           printf("Entrega do pedido finalizado!\n");
+           if (pedidoEmPreparo == NULL) {
+               printf("Nao ha pedido em preparo.\n");
+           } else {
+               pedidoEmPreparo->status = FINALIZADO;
+               empilharHistorico(&historico, pedidoEmPreparo);
+               printf("Entrega do pedido %d finalizada!\n", pedidoEmPreparo->id);
+               pedidoEmPreparo = NULL;
+           }
         }
         else if (opcao == 5){
             // Cancelar último pedido
@@ -135,8 +152,14 @@ int main() {
                 - Liberar memória do pedido cancelado
                 - Informar cancelamento ao usuário
             */
-            liberarPedido(pedidoCancelado);
-            printf("Ultimo pedido cancelado!\n");
+            Pedido *pedidoCancelado = desenfileirarUltimo(&fila);
+            if (pedidoCancelado) {
+                pedidoCancelado->status = CANCELADO;
+                empilharHistorico(&historico, pedidoCancelado);
+                printf("Ultimo pedido cancelado!\n");
+            } else {
+                printf("Nao ha pedidos para cancelar.\n");
+            }
         }
         else if (opcao == 6){
             // Mostrar histórico
@@ -146,7 +169,7 @@ int main() {
                 - Mostrar cliente, hambúrguer e status
                 - Caso não haja histórico, informar
             */
-           liberarHistorico(historico);
+           listarHistorico(historico);
         }
         else if (opcao == 7){
             printf("Saindo do programa.\n");
@@ -161,7 +184,16 @@ int main() {
         - Liberar toda memória alocada (fila, histórico, pedido em preparo)
         - free() em todas as estruturas
     */
-
+    
+    if (pedidoEmPreparo != NULL) {
+        liberarPedido(pedidoEmPreparo);
+    }
+    
+    while (!filaVazia(&fila)) {
+        Pedido *p = desenfileirar(&fila);
+        liberarPedido(p);
+    }
+    
     liberarHistorico(historico);
     return 0;
 

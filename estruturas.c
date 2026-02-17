@@ -1,4 +1,5 @@
 #include "estruturas.h"
+#include <string.h>
 
 /* === Pedido === */
 Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade) {
@@ -51,6 +52,27 @@ Pedido* desenfileirar(FilaPedidos *fila) {
         fila->fim = NULL;
 
     free(aux);
+    return p;
+}
+
+Pedido* desenfileirarUltimo(FilaPedidos *fila) {
+    if (filaVazia(fila)) return NULL;
+
+    NoFila *cur = fila->inicio;
+    NoFila *prev = NULL;
+    while (cur->prox) {
+        prev = cur;
+        cur = cur->prox;
+    }
+
+    Pedido *p = cur->pedido;
+    if (prev == NULL) { // única entrada
+        fila->inicio = fila->fim = NULL;
+    } else {
+        prev->prox = NULL;
+        fila->fim = prev;
+    }
+    free(cur);
     return p;
 }
 
@@ -112,4 +134,8 @@ const char* statusParaTexto(StatusPedido status) {
         case CANCELADO: return "Cancelado";
         default: return "Desconhecido";
     }
+}
+
+int existePedidoEmPreparo(Pedido *p) {
+    return p != NULL;
 }
