@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Enum para status do pedido
+/* === Status do Pedido === */
 typedef enum {
     EM_ESPERA,
     EM_PREPARO,
@@ -12,18 +12,19 @@ typedef enum {
     CANCELADO
 } StatusPedido;
 
+/* === Pedido === */
 typedef struct Pedido {
     int id;
     char cliente[50];
     char hamburguer[50];
     int quantidade;
-    StatusPedido status; 
+    StatusPedido status;
 } Pedido;
 
-// Estrutura da fila 
+/* === Fila de Pedidos === */
 typedef struct NoFila {
-    Pedido *pedido;       // ponteiro para o pedido
-    struct NoFila *prox;  // próximo nó
+    Pedido *pedido;
+    struct NoFila *prox;
 } NoFila;
 
 typedef struct {
@@ -31,21 +32,19 @@ typedef struct {
     NoFila *fim;
 } FilaPedidos;
 
-
-// Estrutura do historico de pedidos finalizados
+/* === Histórico (Pilha) === */
 typedef struct NoHistorico {
-    Pedido *pedido;                  // ponteiro para o pedido finalizado
-    struct NoHistorico *prox;         // próximo nó da pilha
+    Pedido *pedido;
+    struct NoHistorico *prox;
 } NoHistorico;
 
+/* === Protótipos === */
 
-// Protótipos de funções
-
-/* === Pedido === */
+/* Pedido */
 Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade);
 void liberarPedido(Pedido *p);
 
-/* === Fila === */
+/* Fila */
 void inicializarFila(FilaPedidos *fila);
 int filaVazia(FilaPedidos *fila);
 void enfileirar(FilaPedidos *fila, Pedido *p);
@@ -53,15 +52,13 @@ Pedido* desenfileirar(FilaPedidos *fila);
 Pedido* desenfileirarUltimo(FilaPedidos *fila);
 void listarFila(FilaPedidos *fila);
 
-/* === Pedido em preparo === */
-int existePedidoEmPreparo(Pedido *p);
-
-/* ===Histórico === */
+/* Histórico */
 void empilharHistorico(NoHistorico **topo, Pedido *p);
 void listarHistorico(NoHistorico *topo);
 void liberarHistorico(NoHistorico *topo);
 
-/* === Utilidades === */
+/* Utilidades */
+int existePedidoEmPreparo(Pedido *p);
 const char* statusParaTexto(StatusPedido status);
 
 #endif
