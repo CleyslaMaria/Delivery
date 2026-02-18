@@ -4,47 +4,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* === Status do Pedido === */
+/*
+    Enumeração que define os possíveis estados de um pedido.
+    Facilita o controle e a leitura do status ao longo do sistema.
+*/
 typedef enum {
-    EM_ESPERA,
-    EM_PREPARO,
-    FINALIZADO,
-    CANCELADO
+    EM_ESPERA,     // Pedido aguardando atendimento na fila
+    EM_PREPARO,    // Pedido sendo preparado
+    FINALIZADO,    // Pedido entregue
+    CANCELADO      // Pedido cancelado
 } StatusPedido;
 
-/* === Pedido === */
+/*
+    Estrutura que representa um pedido da hamburgueria.
+*/
 typedef struct Pedido {
-    int id;
-    char cliente[50];
-    char hamburguer[50];
-    int quantidade;
-    StatusPedido status;
+    int id;                     // Identificador único do pedido
+    char cliente[50];           // Nome do cliente
+    char hamburguer[50];        // Tipo de hambúrguer escolhido
+    int quantidade;             // Quantidade solicitada
+    StatusPedido status;        // Status atual do pedido
 } Pedido;
 
-/* === Fila de Pedidos === */
+/*
+    Nó da fila encadeada de pedidos em espera.
+*/
 typedef struct NoFila {
-    Pedido *pedido;
-    struct NoFila *prox;
+    Pedido *pedido;             // Ponteiro para o pedido
+    struct NoFila *prox;        // Ponteiro para o próximo nó
 } NoFila;
 
+/*
+    Estrutura da fila de pedidos.
+*/
 typedef struct {
-    NoFila *inicio;
-    NoFila *fim;
+    NoFila *inicio;             // Primeiro pedido da fila
+    NoFila *fim;                // Último pedido da fila
 } FilaPedidos;
 
-/* === Histórico (Pilha) === */
+/*
+    Nó da pilha que armazena o histórico de pedidos.
+*/
 typedef struct NoHistorico {
-    Pedido *pedido;
-    struct NoHistorico *prox;
+    Pedido *pedido;             // Ponteiro para o pedido finalizado ou cancelado
+    struct NoHistorico *prox;   // Próximo nó da pilha
 } NoHistorico;
 
-/* === Protótipos === */
+/* === Protótipos das funções === */
 
-/* Pedido */
+// Pedido
 Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade);
 void liberarPedido(Pedido *p);
 
-/* Fila */
+// Fila
 void inicializarFila(FilaPedidos *fila);
 int filaVazia(FilaPedidos *fila);
 void enfileirar(FilaPedidos *fila, Pedido *p);
@@ -52,12 +64,12 @@ Pedido* desenfileirar(FilaPedidos *fila);
 Pedido* desenfileirarUltimo(FilaPedidos *fila);
 void listarFila(FilaPedidos *fila);
 
-/* Histórico */
+// Histórico
 void empilharHistorico(NoHistorico **topo, Pedido *p);
 void listarHistorico(NoHistorico *topo);
 void liberarHistorico(NoHistorico *topo);
 
-/* Utilidades */
+// Utilidades
 int existePedidoEmPreparo(Pedido *p);
 const char* statusParaTexto(StatusPedido status);
 
