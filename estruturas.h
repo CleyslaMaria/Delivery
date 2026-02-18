@@ -4,79 +4,73 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Enum para status do pedido
+/*
+    Enumeração que define os possíveis estados de um pedido.
+    Facilita o controle e a leitura do status ao longo do sistema.
+*/
 typedef enum {
-    EM_ESPERA,
-    EM_PREPARO,
-    FINALIZADO,
-    CANCELADO
+    EM_ESPERA,     // Pedido aguardando atendimento na fila
+    EM_PREPARO,    // Pedido sendo preparado
+    FINALIZADO,    // Pedido entregue
+    CANCELADO      // Pedido cancelado
 } StatusPedido;
 
+/*
+    Estrutura que representa um pedido da hamburgueria.
+*/
 typedef struct Pedido {
-    int id;
-    char cliente[50];
-    char hamburguer[50];
-    int quantidade;
-    StatusPedido status; 
+    int id;                     // Identificador único do pedido
+    char cliente[50];           // Nome do cliente
+    char hamburguer[50];        // Tipo de hambúrguer escolhido
+    int quantidade;             // Quantidade solicitada
+    StatusPedido status;        // Status atual do pedido
 } Pedido;
 
-// Estrutura da fila 
+/*
+    Nó da fila encadeada de pedidos em espera.
+*/
 typedef struct NoFila {
-    Pedido *pedido;       // ponteiro para o pedido
-    struct NoFila *prox;  // próximo nó
+    Pedido *pedido;             // Ponteiro para o pedido
+    struct NoFila *prox;        // Ponteiro para o próximo nó
 } NoFila;
 
+/*
+    Estrutura da fila de pedidos.
+*/
 typedef struct {
-    NoFila *inicio;
-    NoFila *fim;
+    NoFila *inicio;             // Primeiro pedido da fila
+    NoFila *fim;                // Último pedido da fila
 } FilaPedidos;
 
-
-// Estrutura do historico de pedidos finalizados
+/*
+    Nó da pilha que armazena o histórico de pedidos.
+*/
 typedef struct NoHistorico {
-    Pedido *pedido;                  // ponteiro para o pedido finalizado
-    struct NoHistorico *prox;         // próximo nó da pilha
+    Pedido *pedido;             // Ponteiro para o pedido finalizado ou cancelado
+    struct NoHistorico *prox;   // Próximo nó da pilha
 } NoHistorico;
 
+/* === Protótipos das funções === */
 
-// Protótipos de funções
+// Pedido
+Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade);
+void liberarPedido(Pedido *p);
 
-/* === Pedido === */
-Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade) {
-    Pedido *p = malloc(sizeof(Pedido));
-    if (p == NULL) return NULL;
-
-    p->id = id;
-    strcpy(p->cliente, cliente);
-    strcpy(p->hamburguer, hamburguer);
-    p->quantidade = quantidade;
-    p->status = EM_ESPERA;
-
-    return p;
-}
-
-void liberarPedido(Pedido *p) {
-    if (p != NULL) {
-        free(p);
-    }
-}
-
-/* === Fila === */
+// Fila
 void inicializarFila(FilaPedidos *fila);
 int filaVazia(FilaPedidos *fila);
 void enfileirar(FilaPedidos *fila, Pedido *p);
 Pedido* desenfileirar(FilaPedidos *fila);
+Pedido* desenfileirarUltimo(FilaPedidos *fila);
 void listarFila(FilaPedidos *fila);
 
-/* === Pedido em preparo === */
-int existePedidoEmPreparo(Pedido *p);
-
-/* ===Histórico === */
+// Histórico
 void empilharHistorico(NoHistorico **topo, Pedido *p);
 void listarHistorico(NoHistorico *topo);
 void liberarHistorico(NoHistorico *topo);
 
-/* === Utilidades === */
+// Utilidades
+int existePedidoEmPreparo(Pedido *p);
 const char* statusParaTexto(StatusPedido status);
 
 #endif
