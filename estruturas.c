@@ -4,7 +4,10 @@
 /* === Pedido === */
 Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade) {
     Pedido *p = malloc(sizeof(Pedido));
-    if (!p) return NULL;
+    if (!p) {
+        printf("Erro ao alocar memoria para pedido.\n");
+        return NULL;
+    }
 
     p->id = id;
     strcpy(p->cliente, cliente);
@@ -30,6 +33,11 @@ int filaVazia(FilaPedidos *fila) {
 
 void enfileirar(FilaPedidos *fila, Pedido *p) {
     NoFila *novo = malloc(sizeof(NoFila));
+    if (!novo) {
+        printf("Erro ao alocar memoria para fila.\n");
+        return;
+    }
+
     novo->pedido = p;
     novo->prox = NULL;
 
@@ -48,7 +56,7 @@ Pedido* desenfileirar(FilaPedidos *fila) {
     Pedido *p = aux->pedido;
 
     fila->inicio = aux->prox;
-    if (fila->inicio == NULL)
+    if (!fila->inicio)
         fila->fim = NULL;
 
     free(aux);
@@ -60,35 +68,39 @@ Pedido* desenfileirarUltimo(FilaPedidos *fila) {
 
     NoFila *cur = fila->inicio;
     NoFila *prev = NULL;
+
     while (cur->prox) {
         prev = cur;
         cur = cur->prox;
     }
 
     Pedido *p = cur->pedido;
-    if (prev == NULL) { // única entrada
+
+    if (!prev) {
         fila->inicio = fila->fim = NULL;
     } else {
         prev->prox = NULL;
         fila->fim = prev;
     }
+
     free(cur);
     return p;
 }
 
 void listarFila(FilaPedidos *fila) {
-    NoFila *aux = fila->inicio;
-    if (!aux) {
-        printf("Fila vazia.\n");
+    if (filaVazia(fila)) {
+        printf("Fila de pedidos vazia.\n");
         return;
     }
 
+    NoFila *aux = fila->inicio;
     while (aux) {
-        printf("Pedido %d - %s (%s) x%d\n",
+        printf("Pedido %d - %s (%s) x%d [%s]\n",
                aux->pedido->id,
                aux->pedido->cliente,
                aux->pedido->hamburguer,
-               aux->pedido->quantidade);
+               aux->pedido->quantidade,
+               statusParaTexto(aux->pedido->status));
         aux = aux->prox;
     }
 }
@@ -96,6 +108,11 @@ void listarFila(FilaPedidos *fila) {
 /* === Histórico === */
 void empilharHistorico(NoHistorico **topo, Pedido *p) {
     NoHistorico *novo = malloc(sizeof(NoHistorico));
+    if (!novo) {
+        printf("Erro ao alocar memoria para historico.\n");
+        return;
+    }
+
     novo->pedido = p;
     novo->prox = *topo;
     *topo = novo;
@@ -126,6 +143,11 @@ void liberarHistorico(NoHistorico *topo) {
     }
 }
 
+/* === Utilidades === */
+int existePedidoEmPreparo(Pedido *p) {
+    return p != NULL;
+}
+
 const char* statusParaTexto(StatusPedido status) {
     switch (status) {
         case EM_ESPERA: return "Em espera";
@@ -134,8 +156,4 @@ const char* statusParaTexto(StatusPedido status) {
         case CANCELADO: return "Cancelado";
         default: return "Desconhecido";
     }
-}
-
-int existePedidoEmPreparo(Pedido *p) {
-    return p != NULL;
 }
