@@ -1,0 +1,24 @@
+# Ignora o executável final definido no Makefile 
+hamburgueria
+hamburgueria.exe
+
+# Ignora os arquivos intermediários de compilação 
+*.o
+
+# Arquivos gerados pela flag -g do GCC para depuração
+*.dSYM/
+*.pdb
+*.ilk
+
+# Configurações de IDE
+.vscode/
+.history/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Backup e Logs
+*.log
+*.tmp
+*.bak
