@@ -11,7 +11,7 @@ int main() {
     Pedido *pedidoEmPreparo = NULL;
 
     int opcao;
-    int id = 1; // ID inicial para os pedidos
+    int id = 1; 
 
     // Inicializa a fila de pedidos
     inicializarFila(&fila);
@@ -29,7 +29,7 @@ int main() {
         printf("==========================================\n"); 
         printf("Escolha uma opcao:");
         scanf("%d", &opcao);
-        getchar(); // Limpa o buffer do teclado
+        getchar();
 
     
         if (opcao == 1){
@@ -52,7 +52,7 @@ int main() {
             printf("===================\n");
             printf("Escolha o tipo de hamburguer:");
             scanf("%d", &escolha);
-            getchar(); // Limpa o buffer
+            getchar(); 
 
             switch (escolha) {
                 case 1:
@@ -77,7 +77,7 @@ int main() {
 
             printf("Digite a quantidade:");
             scanf("%d", &quantidade);
-            getchar(); // Limpa o buffer
+            getchar(); 
             
             Pedido *novo = criarPedido(id, cliente, hamburguer, quantidade);
             id++;

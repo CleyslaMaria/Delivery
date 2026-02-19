@@ -6,24 +6,23 @@
 
 /*
     Enumeração que define os possíveis estados de um pedido.
-    Facilita o controle e a leitura do status ao longo do sistema.
 */
 typedef enum {
-    EM_ESPERA,     // Pedido aguardando atendimento na fila
-    EM_PREPARO,    // Pedido sendo preparado
-    FINALIZADO,    // Pedido entregue
-    CANCELADO      // Pedido cancelado
+    EM_ESPERA,     
+    EM_PREPARO,    
+    FINALIZADO,    
+    CANCELADO      
 } StatusPedido;
 
 /*
     Estrutura que representa um pedido da hamburgueria.
 */
 typedef struct Pedido {
-    int id;                     // Identificador único do pedido
-    char cliente[50];           // Nome do cliente
-    char hamburguer[50];        // Tipo de hambúrguer escolhido
-    int quantidade;             // Quantidade solicitada
-    StatusPedido status;        // Status atual do pedido
+    int id;                     
+    char cliente[50];           
+    char hamburguer[50];        
+    int quantidade;            
+    StatusPedido status;       
 } Pedido;
 
 /*
@@ -49,8 +48,6 @@ typedef struct NoHistorico {
     Pedido *pedido;             // Ponteiro para o pedido finalizado ou cancelado
     struct NoHistorico *prox;   // Próximo nó da pilha
 } NoHistorico;
-
-/* === Protótipos das funções === */
 
 // Pedido
 Pedido* criarPedido(int id, char *cliente, char *hamburguer, int quantidade);
