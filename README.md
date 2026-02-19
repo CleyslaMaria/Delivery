@@ -56,15 +56,15 @@ tamanho limitado
 Este arquivo funciona como o "motor" do sistema, contendo as implementações das funções responsáveis por manipular as estruturas de dados de forma dinâmica.
 
 - Fila de Pedidos (FIFO - First In, First Out): A fila gerencia os pedidos em espera, garantindo que a ordem de chegada seja respeitada para o preparo.
--- enfileirar: Adiciona um novo pedido ao final da fila utilizando alocação dinâmica. Se a fila estiver vazia, o novo nó torna-se o início e o fim; caso contrário, ele é conectado após o atual fim.
--- desenfileirar: Remove o primeiro pedido da fila (o que está há mais tempo esperando) para que ele siga para a cozinha. A memória do nó auxiliar é liberada imediatamente após a extração do pedido.
+  - enfileirar: Adiciona um novo pedido ao final da fila utilizando alocação dinâmica. Se a fila estiver vazia, o novo nó torna-se o início e o fim; caso contrário, ele é conectado após o atual fim.
+  - desenfileirar: Remove o primeiro pedido da fila (o que está há mais tempo esperando) para que ele siga para a cozinha. A memória do nó auxiliar é liberada imediatamente após a extração do pedido.
 
 - Cancelamento Estruturado:
--- desenfileirarUltimo: Uma função customizada que permite remover o último pedido inserido na fila.
+  - desenfileirarUltimo: Uma função customizada que permite remover o último pedido inserido na fila.
 Diferente do desenfileirar padrão, esta função percorre a lista até encontrar o penúltimo elemento para atualizar o ponteiro de fim, permitindo o cancelamento de uma desistência recente.
 - Pilha de Histórico (LIFO - Last In, First Out)
 Toda vez que um pedido é finalizado ou cancelado, ele é armazenado em uma pilha, onde o último evento ocorrido é o primeiro a ser visualizado no topo do histórico.
--- empilharHistorico: Insere o pedido no topo da pilha. O novo nó aponta para o antigo topo, e o ponteiro de controle da pilha passa a apontar para este novo elemento.
+  - empilharHistorico: Insere o pedido no topo da pilha. O novo nó aponta para o antigo topo, e o ponteiro de controle da pilha passa a apontar para este novo elemento.
 
 ### 3.Controle de fluxo e interface (main.c)
 O arquivo main.c atua como o orquestrador do sistema, gerenciando a lógica de negócio e a comunicação com o usuário.
@@ -81,6 +81,7 @@ Um requisito fundamental do projeto é o uso obrigatório de malloc e free. O si
 
 ## Instrução de compilação e execução
 O projeto utiliza um Makefile para automatizar o processo de construção e garantir que todos os módulos (main.c e estruturas.c) sejam ligados corretamente.
+
 🐧 No Linux / macOS (Terminal)
 Os sistemas Unix já possuem suporte nativo aos comandos utilizados no Makefile
 1. Compilar
@@ -114,7 +115,7 @@ make clean
 ```
 Nota: No Windows, recomenda-se o uso do terminal Git Bash para compatibilidade total com o comando rm do Makefile.
 
-###Requisitos Técnicos
+### Requisitos Técnicos
 - Compilador: GCC (GNU Compiler Collection).
 - Flags de Compilação: O projeto utiliza -Wall -Wextra -g para garantir que todos os avisos sejam exibidos e permitir a depuração do código.
 - Target: O nome do executável gerado é hamburgueria.
