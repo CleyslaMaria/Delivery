@@ -8,6 +8,7 @@ Turma 01 - Estruturas de Dados
 
 ### Tema escolhido
 O tema escolhido para este projeto foi um sistema de Delivery de Hamburgueria.
+
 ---
 
 ## Objetivo do sistema
